@@ -13,8 +13,10 @@ export const App = () => {
   };
 
   return (
-    <div className="mx-w-x1 mx-auto p-6">
-      <ThoughtForm onSubmit={addThought} />
-    </div>
+    <>
+      <div className="max-w-sm md:max-w-md lg:max-w-xl xl:max-w-2xl mx-auto p-4 md:p-8 lg:p-12">
+        <ThoughtForm onSubmit={addThought} />
+      </div>
+    </>
   )
 }

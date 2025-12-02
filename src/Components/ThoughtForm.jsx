@@ -1,18 +1,70 @@
+import { useState } from "react";
+
 export const ThoughtForm = ({ onSubmit }) => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const message = event.target.message.value;
-    onSubmit(message);
-    event.target.reset();
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  const maxLength = 140;
+  const minLength = 5;
+
+  const handleInputChange = (event) => {
+    const value = event.target.value;
+    setMessage(value);
+
+    //Shows error if you type more than 140 characters
+    if (value.length > maxLength) {
+      setError(`Your message are too long. Please keep it under ${maxLength} characters`)
+      return
+    }
+    setError("");
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (message.trim().length < minLength) {
+      setError(`You must have at least ${minLength} characters.`)
+      return;
+    };
+
+    onSubmit(message);
+    setMessage("");
+  };
+
+  const charactersLeft = maxLength - message.length
+  const isOverLimit = charactersLeft < 0
+
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-white p-6 shadow-md">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-gray-100 p-6 rounded-xs border border-black shadow-[10px_10px_0px_0px_#000]">
       <label htmlFor="message" className="text-lg font-semibold">
         What's making you happy right now?
       </label>
-      <input type="text" id="message" name="message" placeholder="Write a happy thought.." className="border border-gray-300 p-3 text-gray-700 focus: outline-none focus: ring-2 focus: ring-pink-400" />
-      <button type="submit" className="bg-pink-500 hover:bg-pink-600 text-black font-semibold py-2 px-4 rounded-lg transition-colors">
+
+      <textarea
+        id="message"
+        name="message"
+        onChange={handleInputChange}
+        value={message}
+        rows={4}
+        placeholder="Write a happy thought.."
+        className=" w-full bg-white border border-gray-400 p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-200" />
+
+      <div
+        id="character-counter"
+        className={`text-sm ${isOverLimit ? "text-red-500" : "text-gray-700"
+          }`}
+        aria-live="polite"
+      >
+        {charactersLeft} / {maxLength}
+      </div>
+
+      {error && (
+        <div className="mb-4 p-2 bg-red-50 text-red-600 rounded-md text-sm">
+          {error}
+        </div>
+      )}
+
+      <button type="submit" className="bg-red-300 hover:bg-red-400 text-black font-semibold py-2 px-4 rounded-2xl transition-colors">
         ❤️ Send Happy Thoughts ❤️
       </button>
     </form>
