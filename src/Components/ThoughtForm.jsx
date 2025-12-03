@@ -22,6 +22,7 @@ export const ThoughtForm = ({ onSubmit }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    //Shows error if you have less than 5 characters
     if (message.trim().length < minLength) {
       setError(`You must have at least ${minLength} characters.`)
       return;
@@ -35,8 +36,8 @@ export const ThoughtForm = ({ onSubmit }) => {
   const isOverLimit = charactersLeft < 0
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-gray-100 p-6 rounded-xs border border-black shadow-[10px_10px_0px_0px_#000]">
-      <label htmlFor="message" className="text-lg font-semibold">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-gray-100 p-6 rounded-xs border border-black shadow-[8px_8px_0px_0px_#000]">
+      <label htmlFor="message" className="text-md">
         What's making you happy right now?
       </label>
 
@@ -45,9 +46,9 @@ export const ThoughtForm = ({ onSubmit }) => {
         name="message"
         onChange={handleInputChange}
         value={message}
-        rows={4}
+        rows={2}
         placeholder="Write a happy thought.."
-        className=" w-full bg-white border border-gray-400 p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-200" />
+        className=" w-full bg-white border border-gray-400 p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-200 resize-none" />
 
       <div
         id="character-counter"
@@ -64,7 +65,9 @@ export const ThoughtForm = ({ onSubmit }) => {
         </div>
       )}
 
-      <button type="submit" className="bg-red-300 hover:bg-red-400 text-black font-semibold py-2 px-4 rounded-2xl transition-colors">
+      <button
+        type="submit"
+        className="inline-flex items-center gap-2 self-start px-3 py-3 rounded-full bg-red-300 hover:bg-red-400 text-black font-semibold transition-colors">
         ❤️ Send Happy Thoughts ❤️
       </button>
     </form>
