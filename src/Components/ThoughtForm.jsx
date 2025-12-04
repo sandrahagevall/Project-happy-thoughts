@@ -67,8 +67,8 @@ export const ThoughtForm = ({ onSubmit }) => {
 
       <button
         type="submit"
-        className="inline-flex items-center gap-2 self-start px-3 py-3 rounded-full bg-red-300 hover:bg-red-400 text-black font-semibold transition-colors">
-        ❤️ Send Happy Thoughts ❤️
+        className="inline-flex items-center gap-2 self-start px-3 py-3 rounded-full bg-red-300 hover:bg-red-400 text-black font-medium transition-colors text-sm sm:text-base">
+        ❤️ Send Happy Thought ❤️
       </button>
     </form>
   );
