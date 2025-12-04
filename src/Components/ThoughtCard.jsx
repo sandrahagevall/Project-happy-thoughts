@@ -1,4 +1,17 @@
+import { useEffect, useState } from "react";
+
 export const ThoughtCard = ({ thought, onLike, isNew }) => {
+  const [animate, setAnimate] = useState(false);
+
+  useEffect(() => {
+    if (isNew) {
+      // Start animation after render
+      const frame = requestAnimationFrame(() => {
+        setAnimate(true);
+      });
+      return () => cancelAnimationFrame(frame);
+    }
+  }, [isNew]);
 
   const getTimeAgo = (createdAt) => {
     const now = new Date();
@@ -26,7 +39,7 @@ export const ThoughtCard = ({ thought, onLike, isNew }) => {
       shadow-[8px_8px_0_0_#000]
       hover:-translate-y-1 hover:-translate-x-1
       transition-transform duration-200 transition-all
-      ${isNew ? "animate-fade-in-up" : ""}
+      ${animate ? "animate-fade-in-up" : ""}
     `}
     >
 
