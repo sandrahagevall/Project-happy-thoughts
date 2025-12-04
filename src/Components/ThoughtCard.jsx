@@ -38,12 +38,16 @@ export const ThoughtCard = ({ thought, onLike, isNew }) => {
       {/* LIKE + COUNTER + TIME */}
       <div className="flex items-center justify-between">
 
-        {/* ❤️ LIKE SECTION */}
+        {/* LIKE SECTION */}
         <div className="flex items-center gap-2">
           <button
             onClick={() => onLike(thought.id)}
             aria-label={`Like this thought. It currently has ${thought.likes} likes`}
-            className="bg-gray-200 hover:bg-pink-200 w-12 h-12 rounded-full transition-colors shadow-sm"
+            className={`
+              ${thought.likes > 0
+                ? "bg-red-300"
+                : "bg-gray-200 hover:bg-red-300"} 
+                w-12 h-12 rounded-full transition-colors shadow-sm cursor-pointer`}
           >
             ❤️
           </button>
@@ -53,7 +57,7 @@ export const ThoughtCard = ({ thought, onLike, isNew }) => {
           </span>
         </div>
 
-        {/* 🕒 TIME */}
+        {/* TIME */}
         <p className="text-xs text-gray-400">
           {getTimeAgo(thought.createdAt)}
         </p>

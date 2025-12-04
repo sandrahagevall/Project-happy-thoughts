@@ -1,4 +1,4 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import { ThoughtForm } from "./Components/ThoughtForm";
 import { ThoughtList } from "./Components/ThoughtList";
 
@@ -32,7 +32,10 @@ export const App = () => {
       <div className="max-w-sm md:max-w-md lg:max-w-xl mx-auto p-4 md:p-8 lg:p-12">
         <ThoughtForm onSubmit={addThought} />
         <div className="mt-8">
-          <ThoughtList thoughts={thoughts} onLike={handleLike} newThoughtId={newThoughtId} />
+          <ThoughtList
+            thoughts={thoughts}
+            onLike={handleLike}
+            newThoughtId={newThoughtId} />
         </div>
       </div>
     </>

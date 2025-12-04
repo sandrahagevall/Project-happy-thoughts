@@ -48,7 +48,7 @@ export const ThoughtForm = ({ onSubmit }) => {
         value={message}
         rows={2}
         placeholder="Write a happy thought.."
-        className=" w-full bg-white border border-gray-400 p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-200 resize-none" />
+        className=" w-full bg-white border border-gray-400 p-3 text-black focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-200 resize-none rounded-xs" />
 
       <div
         id="character-counter"
@@ -67,7 +67,7 @@ export const ThoughtForm = ({ onSubmit }) => {
 
       <button
         type="submit"
-        className="inline-flex items-center gap-2 self-start px-3 py-3 rounded-full bg-red-300 hover:bg-red-400 text-black font-medium transition-colors text-sm sm:text-base">
+        className="inline-flex items-center gap-2 self-start px-3 py-3 rounded-full bg-red-300 hover:bg-red-400 text-black font-medium transition-colors text-sm sm:text-base cursor-pointer">
         ❤️ Send Happy Thought ❤️
       </button>
     </form>
