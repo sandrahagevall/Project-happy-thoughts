@@ -5,11 +5,10 @@ export const ThoughtCard = ({ thought, onLike, isNew }) => {
 
   useEffect(() => {
     if (isNew) {
-      // Start animation after render
-      const frame = requestAnimationFrame(() => {
-        setAnimate(true);
-      });
-      return () => cancelAnimationFrame(frame);
+      const timeout = setTimeout(() => setAnimate(true), 0);
+      return () => clearTimeout(timeout);
+    } else {
+      setAnimate(true);
     }
   }, [isNew]);
 
@@ -35,12 +34,13 @@ export const ThoughtCard = ({ thought, onLike, isNew }) => {
   return (
     <div
       className={`
-      bg-white border border-black rounded-xs p-6 
-      shadow-[8px_8px_0_0_#000]
-      hover:-translate-y-1 hover:-translate-x-1
-      transition-transform duration-200 transition-all
-      ${animate ? "animate-fade-in-up" : ""}
-    `}
+       ${isNew ? "opacity-0" : ""}
+       ${animate ? "animate-fadeInUp" : ""}
+       bg-white border border-black rounded-xs p-6 
+       shadow-[8px_8px_0_0_#000]
+       hover:-translate-y-1 hover:-translate-x-1
+       transition-transform duration-200
+       `}
     >
 
       {/* MESSAGE */}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ThoughtForm } from "./Components/ThoughtForm";
 import { ThoughtList } from "./Components/ThoughtList";
 
@@ -26,6 +26,12 @@ export const App = () => {
       )
     )
   }
+
+  // useEffect(() => {
+  //   fetch("https://happy-thoughts-api-4ful.onrender.com/thoughts")
+  //     .then(res => res.json())
+  //     .then(data => setThoughts(data));
+  // }, []);
 
   return (
     <>

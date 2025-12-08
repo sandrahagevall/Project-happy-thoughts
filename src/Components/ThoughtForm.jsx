@@ -32,8 +32,8 @@ export const ThoughtForm = ({ onSubmit }) => {
     setMessage("");
   };
 
-  const charactersLeft = maxLength - message.length
-  const isOverLimit = charactersLeft < 0
+  const charactersTyped = message.length;
+  const isOverLimit = charactersTyped > maxLength;
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-gray-100 p-6 rounded-xs border border-black shadow-[8px_8px_0px_0px_#000]">
@@ -56,7 +56,7 @@ export const ThoughtForm = ({ onSubmit }) => {
           }`}
         aria-live="polite"
       >
-        {charactersLeft} / {maxLength}
+        {charactersTyped} / {maxLength}
       </div>
 
       {error && (
