@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import dayjs from "dayjs";
+
 
 export const ThoughtCard = ({ thought, onLike, isNew }) => {
   const [animate, setAnimate] = useState(false);
@@ -12,22 +14,29 @@ export const ThoughtCard = ({ thought, onLike, isNew }) => {
     }
   }, [isNew]);
 
+
   const getTimeAgo = (createdAt) => {
-    const now = new Date();
-    const date = new Date(createdAt);
+    const now = dayjs();
+    const date = dayjs(createdAt);
 
-    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    const diffInSeconds = now.diff(date, "second");
 
-    if (diffInSeconds < 60)
+    if (diffInSeconds < 60) {
       return `${diffInSeconds} seconds ago`;
+    }
 
-    if (diffInSeconds < 3600)
-      return `${Math.floor(diffInSeconds / 60)} minutes${Math.floor(diffInSeconds / 60) > 1 ? "s" : ""} ago`;
+    const diffInMinutes = now.diff(date, "minute");
+    if (diffInMinutes < 60) {
+      return `${diffInMinutes} minute${diffInMinutes > 1 ? "s" : ""} ago`;
+    }
 
-    if (diffInSeconds < 86400)
-      return `${Math.floor(diffInSeconds / 3600)} hours${Math.floor(diffInSeconds / 3600) > 1 ? "s" : ""} ago`;
+    const diffInHours = now.diff(date, "hour");
+    if (diffInHours < 24) {
+      return `${diffInHours} hour${diffInHours > 1 ? "s" : ""} ago`;
+    }
 
-    return `${Math.floor(diffInSeconds / 86400)} day${Math.floor(diffInSeconds / 86400) > 1 ? "s" : ""} ago`;
+    const diffInDays = now.diff(date, "day");
+    return `${diffInDays} day${diffInDays > 1 ? "s" : ""} ago`;
   };
 
 
@@ -55,9 +64,9 @@ export const ThoughtCard = ({ thought, onLike, isNew }) => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => onLike(thought.id)}
-            aria-label={`Like this thought. It currently has ${thought.likes} likes`}
+            aria-label={`Like this thought. It currently has ${thought.hearts} likes`}
             className={`
-              ${thought.likes > 0
+              ${thought.hearts > 0
                 ? "bg-red-300"
                 : "bg-gray-200 hover:bg-red-300"} 
                 w-12 h-12 rounded-full transition-colors shadow-sm cursor-pointer`}
@@ -66,7 +75,7 @@ export const ThoughtCard = ({ thought, onLike, isNew }) => {
           </button>
 
           <span className="text-gray-500 text-sm">
-            x {thought.likes}
+            x {thought.hearts}
           </span>
         </div>
 
