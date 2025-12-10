@@ -5,10 +5,10 @@ export const ThoughtList = ({ thoughts, onLike, newThoughtId }) => {
     <div className="space-y-4">
       {thoughts.map((thought) => (
         <ThoughtCard
-          key={thought.id}
+          key={thought._id}
           thought={thought}
           onLike={onLike}
-          isNew={thought.id === newThoughtId} />
+          isNew={thought._id === newThoughtId} />
       ))}
     </div>
   );

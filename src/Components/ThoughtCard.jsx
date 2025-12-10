@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { HeartButton } from "./HeartButton";
 
 
 export const ThoughtCard = ({ thought, onLike, isNew }) => {
@@ -53,7 +54,7 @@ export const ThoughtCard = ({ thought, onLike, isNew }) => {
     >
 
       {/* MESSAGE */}
-      <p className="text-black text-md mb-4 font-medium break-words leading-relaxed">
+      <p className="text-black text-lg mb-4 font-medium wrap-break-word leading-relaxed">
         {thought.message}
       </p>
 
@@ -62,25 +63,18 @@ export const ThoughtCard = ({ thought, onLike, isNew }) => {
 
         {/* LIKE SECTION */}
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => onLike(thought.id)}
-            aria-label={`Like this thought. It currently has ${thought.hearts} likes`}
-            className={`
-              ${thought.hearts > 0
-                ? "bg-red-300"
-                : "bg-gray-200 hover:bg-red-300"} 
-                w-12 h-12 rounded-full transition-colors shadow-sm cursor-pointer`}
-          >
-            ❤️
-          </button>
+          <HeartButton
+            onClick={() => onLike(thought._id)}
+            hearts={thought.hearts}
+          />
 
-          <span className="text-gray-500 text-sm">
+          <span className="text-gray-500 text-sm font-sans">
             x {thought.hearts}
           </span>
         </div>
 
         {/* TIME */}
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-gray-400 font-sans">
           {getTimeAgo(thought.createdAt)}
         </p>
 

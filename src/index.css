@@ -2,9 +2,14 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
+@theme {
+  --font-sans: "Inter", sans-serif;
+  --color-happy: #FF9D9D;
+  --color-happy-hover: #FF8C8C;
+}
 
 :root {
-  font-family: 'Inter', sans-serif;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 @keyframes fadeInUp {
@@ -21,4 +26,25 @@
 
 .animate-fadeInUp {
   animation: fadeInUp .4s ease-out forwards;
+}
+
+@keyframes pulseGlow {
+  0% {
+    transform: scale(1);
+    text-shadow: 0 0 0px #ff6b6b;
+  }
+
+  50% {
+    transform: scale(1.08);
+    text-shadow: 0 0 12px #ff6b6b;
+  }
+
+  100% {
+    transform: scale(1);
+    text-shadow: 0 0 0px #ff6b6b;
+  }
+}
+
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
 }
