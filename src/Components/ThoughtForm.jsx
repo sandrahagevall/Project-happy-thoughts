@@ -36,8 +36,8 @@ export const ThoughtForm = ({ onSubmit }) => {
   const isOverLimit = charactersTyped > maxLength;
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-gray-100 p-6 rounded-xs border border-black shadow-[8px_8px_0px_0px_#000]">
-      <label htmlFor="message" className="text-md">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-gray p-6 rounded-xs border border-black shadow-[8px_8px_0px_0px_#000]">
+      <label htmlFor="message" className="text-lg">
         What's making you happy right now?
       </label>
 
@@ -67,7 +67,7 @@ export const ThoughtForm = ({ onSubmit }) => {
 
       <button
         type="submit"
-        className="inline-flex items-center font-sans gap-2 self-start px-3 py-3 rounded-full bg-happy hover:bg-happy-hover text-black font-medium transition-colors text-sm cursor-pointer">
+        className="inline-flex items-center font-sans gap-2 self-start px-3 py-3 rounded-full bg-happy hover:bg-happy-hover text-black font-medium transition-colors text-sm md:text-base cursor-pointer">
         ❤️ Send Happy Thought ❤️
       </button>
     </form>

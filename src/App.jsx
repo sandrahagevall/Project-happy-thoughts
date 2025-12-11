@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
+import { Navbar } from "./Components/Navbar";
 import { ThoughtForm } from "./Components/ThoughtForm";
 import { ThoughtList } from "./Components/ThoughtList";
-import { MyLikedThoughts } from "./Components/MyLikedThoughts";
+import { SkeletonLoader } from "./Components/SkeletonLoader";
 
 const API_URL = "https://happy-thoughts-api-4ful.onrender.com/thoughts";
 
@@ -11,15 +12,20 @@ export const App = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const [likedThoughtsId, setLikedThoughtsId] = useState(() => {
-    const stored = localStorage.getItem("likedThoughtsId");
+  const [likedThoughts, setLikedThoughts] = useState(() => {
+    const stored = localStorage.getItem("likedThoughts");
     return stored ? JSON.parse(stored) : [];
   });
+
 
   useEffect(() => {
     const fetchThoughts = async () => {
       setLoading(true);
       setError(null);
+
+      // Test for loadingspinner
+      // await new Promise((resolve) => setTimeout(resolve, 1500));
+
       try {
         const res = await fetch(API_URL);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -36,6 +42,11 @@ export const App = () => {
     fetchThoughts();
 
   }, []);
+
+
+  useEffect(() => {
+    localStorage.setItem("likedThoughts", JSON.stringify(likedThoughts))
+  }, [likedThoughts]);
 
 
   const addThought = async (newMessage) => {
@@ -59,21 +70,25 @@ export const App = () => {
 
       setNewThoughtId(newThought._id);
 
-    } catch (err) {
+    } catch (error) {
       setError("Could not create thought. Try again later.");
     }
   };
 
 
   const handleLike = async (id) => {
-    setThoughts(prev =>
-      prev.map((thought) =>
-        thought._id === id ? { ...thought, hearts: (thought.hearts || 0) + 1 }
-          : thought
-      )
+    // Optimistic update (save old values)
+    const previousThoughts = thoughts;
+    const newThoughts = thoughts.map((thought) =>
+      thought._id === id
+        ? { ...thought, hearts: thought.hearts + 1 }
+        : thought
     );
 
+    setThoughts(newThoughts);
+
     try {
+      // Send like to API
       const res = await fetch(`${API_URL}/${id}/like`, {
         method: "POST",
       });
@@ -81,22 +96,44 @@ export const App = () => {
       if (!res.ok) {
         throw new Error("Failed to like thought");
       }
+
+      // Add to LikedThoughts 
+      setLikedThoughts((prev) =>
+        prev.includes(id) ? prev : [...prev, id]);
+
     } catch (error) {
+      // Rollback UI if API fails
+      setThoughts(previousThoughts);
       setError("Could not like thought");
     }
   };
 
 
   return (
-    <div className="max-w-sm md:max-w-md lg:max-w-xl mx-auto p-4 md:p-8 lg:p-12">
-      <h1 className="text-center pb-6 text-2xl pulse-glow">Welcome to Happy Thoughts</h1>
-      <ThoughtForm onSubmit={addThought} />
-      <div className="mt-8">
-        <ThoughtList
-          thoughts={thoughts}
-          onLike={handleLike}
-          newThoughtId={newThoughtId} />
-      </div>
-    </div>
+    <>
+      <Navbar likedThoughts={likedThoughts} />
+      <main>
+        <div className="max-w-sm md:max-w-xl lg:max-w-3xl mx-auto p-4 md:p-8 lg:p-12">
+          <h1 className="text-center pb-8 text-2xl lg:text-3xl pulse-glow">Welcome to Happy Thoughts</h1>
+          <ThoughtForm onSubmit={addThought} />
+          {error && (
+            <div className="text-center text-red-600 mb-4">
+              {error}
+            </div>
+          )}
+          <div className="mt-8">
+            {loading ? (
+              <SkeletonLoader />
+            ) : (
+              <ThoughtList
+                thoughts={thoughts}
+                onLike={handleLike}
+                newThoughtId={newThoughtId}
+              />
+            )}
+          </div>
+        </div>
+      </main>
+    </>
   )
 }
