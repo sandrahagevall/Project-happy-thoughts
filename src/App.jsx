@@ -26,9 +26,6 @@ export const App = () => {
       setLoading(true);
       setError(null);
 
-      // Test for loadingspinner
-      // await new Promise((resolve) => setTimeout(resolve, 1500));
-
       try {
         const res = await fetch(API_URL);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
