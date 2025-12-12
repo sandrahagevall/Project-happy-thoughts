@@ -29,7 +29,12 @@ export const ThoughtCard = ({ thought, onLike, isNew }) => {
     >
 
       {/* MESSAGE */}
-      <p className="text-black text-lg mb-4 font-medium wrap-break-word leading-relaxed">
+      <p
+        className="
+          text-black text-lg mb-4 font-medium leading-relaxed
+          wrap-break-word
+        "
+      >
         {thought.message}
       </p>
 

@@ -29,23 +29,23 @@
   animation: fadeInUp .4s ease-out forwards;
 }
 
-@keyframes pulseGlow {
+@keyframes softGlow {
   0% {
     transform: scale(1);
-    text-shadow: 0 0 0px #ff6b6b;
+    filter: drop-shadow(0 0 0px #ff9ca6);
   }
 
   50% {
-    transform: scale(1.08);
-    text-shadow: 0 0 12px #ff6b6b;
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 14px #ff6b7a);
   }
 
   100% {
     transform: scale(1);
-    text-shadow: 0 0 0px #ff6b6b;
+    filter: drop-shadow(0 0 0px #ff9ca6);
   }
 }
 
-.pulse-glow {
-  animation: pulseGlow 2s ease-in-out infinite;
+.soft-glow {
+  animation: softGlow 2.5s ease-in-out infinite;
 }

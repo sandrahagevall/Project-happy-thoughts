@@ -12,11 +12,14 @@ export const App = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Get liked thoughts from local storage
   const [likedThoughts, setLikedThoughts] = useState(() => {
     const stored = localStorage.getItem("likedThoughts");
     return stored ? JSON.parse(stored) : [];
   });
 
+
+  /*--- Fetch Thoughts from API ---*/
 
   useEffect(() => {
     const fetchThoughts = async () => {
@@ -40,14 +43,16 @@ export const App = () => {
     };
 
     fetchThoughts();
-
   }, []);
 
 
+  // Sync liked thoughts to local storage whenever likedThoughts changes
   useEffect(() => {
     localStorage.setItem("likedThoughts", JSON.stringify(likedThoughts))
   }, [likedThoughts]);
 
+
+  /*--- POST new thought to API ---*/
 
   const addThought = async (newMessage) => {
     try {
@@ -68,7 +73,13 @@ export const App = () => {
       // Add the new thought from API
       setThoughts((prev) => [newThought, ...prev]);
 
+      //Mark this thought as new so it can animate in ThoughtCard
       setNewThoughtId(newThought._id);
+
+      // Reset newThoughtId after animation is finished
+      setTimeout(() => {
+        setNewThoughtId(null);
+      }, 450);
 
     } catch (error) {
       setError("Could not create thought. Try again later.");
@@ -76,8 +87,10 @@ export const App = () => {
   };
 
 
+  /*--- POST like to API ---*/
+
   const handleLike = async (id) => {
-    // Optimistic update (save old values)
+    // Optimistic update - update likes right away, no need to wait for API, user get feedback immediately
     const previousThoughts = thoughts;
     const newThoughts = thoughts.map((thought) =>
       thought._id === id
@@ -91,13 +104,12 @@ export const App = () => {
       // Send like to API
       const res = await fetch(`${API_URL}/${id}/like`, {
         method: "POST",
+        headers: { "Content-Type": "application/json", }
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to like thought");
-      }
+      if (!res.ok) throw new Error("Failed to like thought");
 
-      // Add to LikedThoughts 
+      // Add thought ID to likedThoughts if not already included
       setLikedThoughts((prev) =>
         prev.includes(id) ? prev : [...prev, id]);
 
@@ -114,13 +126,18 @@ export const App = () => {
       <Navbar likedThoughts={likedThoughts} />
       <main>
         <div className="max-w-sm md:max-w-xl lg:max-w-3xl mx-auto p-4 md:p-8 lg:p-12">
-          <h1 className="text-center pb-8 text-2xl lg:text-3xl pulse-glow">Welcome to Happy Thoughts</h1>
+          <h1 className="text-center pb-8 text-2xl lg:text-3xl soft-glow">
+            Welcome to Happy Thoughts
+          </h1>
+
           <ThoughtForm onSubmit={addThought} />
+
           {error && (
             <div className="text-center text-red-600 mb-4">
               {error}
             </div>
           )}
+
           <div className="mt-8">
             {loading ? (
               <SkeletonLoader />
@@ -135,5 +152,5 @@ export const App = () => {
         </div>
       </main>
     </>
-  )
-}
+  );
+};

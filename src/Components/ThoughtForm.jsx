@@ -13,20 +13,21 @@ export const ThoughtForm = ({ onSubmit }) => {
 
     //Shows error if you type more than 140 characters
     if (value.length > maxLength) {
-      setError(`Your message are too long. Please keep it under ${maxLength} characters`)
-      return
+      setError(`Your message are too long. Please keep it under ${maxLength} characters`);
+      return;
     }
+
     setError("");
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    //Shows error if you have less than 5 characters
+    //Show error if you have less than 5 characters
     if (message.trim().length < minLength) {
-      setError(`You must have at least ${minLength} characters.`)
+      setError(`You must have at least ${minLength} characters.`);
       return;
-    };
+    }
 
     onSubmit(message);
     setMessage("");
@@ -35,8 +36,15 @@ export const ThoughtForm = ({ onSubmit }) => {
   const charactersTyped = message.length;
   const isOverLimit = charactersTyped > maxLength;
 
+
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-gray p-6 rounded-xs border border-black shadow-[8px_8px_0px_0px_#000]">
+    <form
+      onSubmit={handleSubmit}
+      className="
+        flex flex-col gap-4 bg-gray p-6 rounded-xs border border-black 
+        shadow-[8px_8px_0px_0px_#000]
+      "
+    >
       <label htmlFor="message" className="text-lg">
         What's making you happy right now?
       </label>
@@ -44,17 +52,21 @@ export const ThoughtForm = ({ onSubmit }) => {
       <textarea
         id="message"
         name="message"
-        onChange={handleInputChange}
         value={message}
+        onChange={handleInputChange}
         rows={2}
-        placeholder="Write a happy thought.."
-        className=" w-full bg-white border border-gray-400 p-3 text-black focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-200 resize-none rounded-xs" />
+        placeholder="Write a happy thought..."
+        className="
+          w-full bg-white border border-gray-400 p-3 text-black
+          focus:outline-none focus:ring-2 focus:ring-red-200 
+          focus:border-red-200 resize-none rounded-xs
+        "
+      />
 
       <div
         id="character-counter"
-        className={`text-sm ${isOverLimit ? "text-red-500" : "text-gray-700"
-          }`}
         aria-live="polite"
+        className={`text-sm ${isOverLimit ? "text-red-500" : "text-gray-700"}`}
       >
         {charactersTyped} / {maxLength}
       </div>
@@ -67,7 +79,12 @@ export const ThoughtForm = ({ onSubmit }) => {
 
       <button
         type="submit"
-        className="inline-flex items-center font-sans gap-2 self-start px-3 py-3 rounded-full bg-happy hover:bg-happy-hover text-black font-medium transition-colors text-sm md:text-base cursor-pointer">
+        className="
+          inline-flex items-center gap-2 px-3 py-3 rounded-full bg-happy 
+          hover:bg-happy-hover text-black font-medium font-sans
+          transition-colors text-sm md:text-base cursor-pointer self-start
+        "
+      >
         ❤️ Send Happy Thought ❤️
       </button>
     </form>

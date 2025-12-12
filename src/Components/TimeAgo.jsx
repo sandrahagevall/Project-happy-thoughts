@@ -10,7 +10,7 @@ export const TimeAgo = ({ createdAt }) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimeAgo(getTimeAgo())
+      setTimeAgo(getTimeAgo());
     }, 60000);
 
     return () => clearInterval(interval);
@@ -21,5 +21,5 @@ export const TimeAgo = ({ createdAt }) => {
     <span className="text-xs text-gray-500 font-sans">
       {timeAgo}
     </span>
-  )
-}
+  );
+};
