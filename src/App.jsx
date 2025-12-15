@@ -130,7 +130,7 @@ export const App = () => {
           <ThoughtForm onSubmit={addThought} />
 
           {error && (
-            <div className="text-center text-red-600 mb-4">
+            <div className="text-center text-red-600 mb-4 mt-5">
               {error}
             </div>
           )}
