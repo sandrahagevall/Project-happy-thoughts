@@ -117,6 +117,29 @@ export const App = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this thought?")) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        setError(data.message);
+        return;
+      }
+      // Update state after successful deletion
+      setThoughts((prev) => prev.filter((thought) => thought._id !== id));
+    } catch (error) {
+      setError("Could not delete thought");
+    }
+  };
+
 
   return (
     <>
@@ -130,7 +153,7 @@ export const App = () => {
           <ThoughtForm onSubmit={addThought} />
 
           {error && (
-            <div className="text-center text-red-600 mb-4 mt-5">
+            <div className="text-center text-red-600 mt-8">
               {error}
             </div>
           )}
@@ -143,6 +166,7 @@ export const App = () => {
                 thoughts={thoughts}
                 onLike={handleLike}
                 newThoughtId={newThoughtId}
+                onDelete={handleDelete}
               />
             )}
           </div>
