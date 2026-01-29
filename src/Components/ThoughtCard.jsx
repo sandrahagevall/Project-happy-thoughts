@@ -39,8 +39,9 @@ export const ThoughtCard = ({ thought, onLike, onDelete, onUpdate, isNew }) => {
           className="
             w-full border border-black rounded-xs p-2
             text-black text-lg font-medium leading-relaxed
-            focus:outline-none focus:ring-2 focus:ring-pink-300
-            mb-4
+            focus:outline-none focus:ring-2 focus:ring-red-200 
+          focus:border-red-200
+            mb-4 mt-4 resize-none
           "
           rows={2}
           autoFocus
@@ -82,7 +83,7 @@ export const ThoughtCard = ({ thought, onLike, onDelete, onUpdate, isNew }) => {
               onUpdate(thought._id, editedMessage);
               setIsEditing(false);
             }}
-            className="text-sm text-pink-600 hover:underline"
+            className="text-sm text-pink-600 hover:underline cursor-pointer"
           >
             Save
           </button>
@@ -92,7 +93,7 @@ export const ThoughtCard = ({ thought, onLike, onDelete, onUpdate, isNew }) => {
               setEditedMessage(thought.message);
               setIsEditing(false);
             }}
-            className="text-sm text-gray-500 hover:underline"
+            className="text-sm text-gray-500 hover:underline cursor-pointer"
           >
             Cancel
           </button>
@@ -104,13 +105,13 @@ export const ThoughtCard = ({ thought, onLike, onDelete, onUpdate, isNew }) => {
         <button
           onClick={() => setIsEditing(true)}
           title="Edit thought"
-          className="p-1 text-pink-400 hover:text-pink-400 transition">
+          className="p-1 text-pink-400 hover:text-pink-400 transition cursor-pointer">
           ✏️
         </button>
 
         <button onClick={() => onDelete(thought._id)}
           title="Delete thought"
-          className="p-1 text-black hover:text-red-600 transition">
+          className="p-1 text-black hover:text-red-600 transition cursor-pointer">
           ✕
         </button>
       </div>

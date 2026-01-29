@@ -67,6 +67,8 @@ export const App = () => {
 
       const data = await res.json();
 
+      setError(null);
+
       // Add the new thought from API
       setThoughts((prev) => [data.response, ...prev]);
 
