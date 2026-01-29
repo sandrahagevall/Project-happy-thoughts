@@ -3,8 +3,10 @@ import { HeartButton } from "./HeartButton";
 import { TimeAgo } from "./TimeAgo";
 
 
-export const ThoughtCard = ({ thought, onLike, onDelete, isNew }) => {
+export const ThoughtCard = ({ thought, onLike, onDelete, onUpdate, isNew }) => {
   const [animate, setAnimate] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedMessage, setEditedMessage] = useState(thought.message);
 
   useEffect(() => {
     if (isNew) {
@@ -30,14 +32,29 @@ export const ThoughtCard = ({ thought, onLike, onDelete, isNew }) => {
     >
 
       {/* MESSAGE */}
-      <p
-        className="
+      {isEditing ? (
+        <textarea
+          value={editedMessage}
+          onChange={(e) => setEditedMessage(e.target.value)}
+          className="
+            w-full border border-black rounded-xs p-2
+            text-black text-lg font-medium leading-relaxed
+            focus:outline-none focus:ring-2 focus:ring-pink-300
+            mb-4
+          "
+          rows={2}
+          autoFocus
+        />
+      ) : (
+        <p
+          className="
           text-black text-lg mb-4 font-medium leading-relaxed
           wrap-break-word
         "
-      >
-        {thought.message}
-      </p>
+        >
+          {thought.message}
+        </p>
+      )}
 
       {/* LIKE + COUNTER + TIME */}
       <div className="flex items-center justify-between">
@@ -58,9 +75,34 @@ export const ThoughtCard = ({ thought, onLike, onDelete, isNew }) => {
         <TimeAgo createdAt={thought.createdAt} />
       </div>
 
+      {isEditing && (
+        <div className="flex justify-end gap-3 mt-3">
+          <button
+            onClick={() => {
+              onUpdate(thought._id, editedMessage);
+              setIsEditing(false);
+            }}
+            className="text-sm text-pink-600 hover:underline"
+          >
+            Save
+          </button>
+
+          <button
+            onClick={() => {
+              setEditedMessage(thought.message);
+              setIsEditing(false);
+            }}
+            className="text-sm text-gray-500 hover:underline"
+          >
+            Cancel
+          </button>
+        </div>
+      )}
+
       {/* EDIT & DELETE BUTTON */}
       <div className="absolute top-2 right-2 mr-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
         <button
+          onClick={() => setIsEditing(true)}
           title="Edit thought"
           className="p-1 text-pink-400 hover:text-pink-400 transition">
           ✏️

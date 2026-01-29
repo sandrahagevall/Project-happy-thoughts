@@ -4,7 +4,7 @@ import { ThoughtForm } from "./Components/ThoughtForm";
 import { ThoughtList } from "./Components/ThoughtList";
 import { SkeletonLoader } from "./Components/SkeletonLoader";
 
-const API_URL = "https://happy-thoughts-api-4ful.onrender.com/thoughts";
+const API_URL = "https://js-project-api-uhzm.onrender.com/thoughts";
 
 export const App = () => {
   const [thoughts, setThoughts] = useState([]);
@@ -140,6 +140,32 @@ export const App = () => {
     }
   };
 
+  const handleUpdate = async (id, updatedMessage) => {
+    try {
+      const res = await fetch(`${API_URL}/${id}`, {
+
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: updatedMessage }),
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        setError(data.message);
+        return;
+      }
+
+      // Update the thought in the list
+      setThoughts((prev) =>
+        prev.map((thought) =>
+          thought._id === id ? { ...thought, message: updatedMessage } : thought
+        )
+      );
+    } catch (error) {
+      setError("Could not update thought");
+    }
+  };
 
   return (
     <>
@@ -165,8 +191,9 @@ export const App = () => {
               <ThoughtList
                 thoughts={thoughts}
                 onLike={handleLike}
-                newThoughtId={newThoughtId}
                 onDelete={handleDelete}
+                onUpdate={handleUpdate}
+                newThoughtId={newThoughtId}
               />
             )}
           </div>

@@ -1,6 +1,6 @@
 import { ThoughtCard } from "./ThoughtCard";
 
-export const ThoughtList = ({ thoughts, onLike, newThoughtId, onDelete }) => {
+export const ThoughtList = ({ thoughts, onLike, onDelete, onUpdate, newThoughtId }) => {
   return (
     <div className="space-y-6">
       {thoughts.map((thought) => (
@@ -9,6 +9,7 @@ export const ThoughtList = ({ thoughts, onLike, newThoughtId, onDelete }) => {
           thought={thought}
           onLike={onLike}
           onDelete={onDelete}
+          onUpdate={onUpdate}
           isNew={thought._id === newThoughtId} />
       ))}
     </div>
