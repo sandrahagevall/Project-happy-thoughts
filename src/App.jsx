@@ -31,7 +31,7 @@ export const App = () => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
 
-        setThoughts(data);
+        setThoughts(data.response);
       } catch (error) {
         setError("Couldn't fetch thoughts. Try again later");
       } finally {
@@ -65,13 +65,13 @@ export const App = () => {
         return;
       }
 
-      const newThought = await res.json();
+      const data = await res.json();
 
       // Add the new thought from API
-      setThoughts((prev) => [newThought, ...prev]);
+      setThoughts((prev) => [data.response, ...prev]);
 
       //Mark this thought as new so it can animate in ThoughtCard
-      setNewThoughtId(newThought._id);
+      setNewThoughtId(data.response._id);
 
       // Reset newThoughtId after animation is finished
       setTimeout(() => {
@@ -159,7 +159,7 @@ export const App = () => {
       // Update the thought in the list
       setThoughts((prev) =>
         prev.map((thought) =>
-          thought._id === id ? { ...thought, message: updatedMessage } : thought
+          thought._id === id ? data.response : thought
         )
       );
     } catch (error) {
