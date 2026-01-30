@@ -27,7 +27,7 @@ export const App = () => {
 
   useEffect(() => {
     const fetchThoughts = async () => {
-      setLoading(true);
+
       setError(null);
 
       const params = new URLSearchParams();
