@@ -4,7 +4,7 @@ export const SkeletonLoader = () => {
 
   return (
     <div
-      className="mx-auto w-full max-w-md space-y-4"
+      className="max-w-sm md:max-w-xl lg:max-w-3xl mx-auto space-y-4"
       role="status"
       aria-label="Loading thoughts"
       aria-busy="true"

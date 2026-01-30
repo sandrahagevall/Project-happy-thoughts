@@ -3,6 +3,7 @@ import { Navbar } from "./Components/Navbar";
 import { ThoughtForm } from "./Components/ThoughtForm";
 import { ThoughtList } from "./Components/ThoughtList";
 import { SkeletonLoader } from "./Components/SkeletonLoader";
+import { SortFilterBar } from "./Components/SortFilterBar";
 
 const API_URL = "https://js-project-api-uhzm.onrender.com/thoughts";
 
@@ -11,6 +12,9 @@ export const App = () => {
   const [newThoughtId, setNewThoughtId] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState("");
+  const [order, setOrder] = useState("desc");
+  const [minLikes, setMinLikes] = useState(0);
 
   // Get liked thoughts from local storage
   const [likedThoughts, setLikedThoughts] = useState(() => {
@@ -26,8 +30,27 @@ export const App = () => {
       setLoading(true);
       setError(null);
 
+      const params = new URLSearchParams();
+
+      if (sortBy) {
+        params.append("sort", sortBy);
+      }
+
+      if (order) {
+        params.append("order", order);
+      }
+
+      if (minLikes) {
+        params.append("hearts", minLikes);
+      }
+
+      const query = params.toString();
+      const url = query
+        ? `${API_URL}?${query}`
+        : API_URL;
+
       try {
-        const res = await fetch(API_URL);
+        const res = await fetch(url);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
 
@@ -40,7 +63,7 @@ export const App = () => {
     };
 
     fetchThoughts();
-  }, []);
+  }, [sortBy, order, minLikes]);
 
 
   // Sync liked thoughts to local storage whenever likedThoughts changes
@@ -180,6 +203,15 @@ export const App = () => {
 
           <ThoughtForm onSubmit={addThought} />
 
+          <SortFilterBar
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            order={order}
+            setOrder={setOrder}
+            minLikes={minLikes}
+            setMinLikes={setMinLikes}
+          />
+
           {error && (
             <div className="text-center text-red-600 mt-8">
               {error}
@@ -189,6 +221,10 @@ export const App = () => {
           <div className="mt-8">
             {loading ? (
               <SkeletonLoader />
+            ) : thoughts.length === 0 ? (
+              <p className="text-center text-gray-500 mt-8">
+                No thoughts match your filter.
+              </p>
             ) : (
               <ThoughtList
                 thoughts={thoughts}
