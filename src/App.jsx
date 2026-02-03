@@ -4,8 +4,10 @@ import { ThoughtForm } from "./Components/ThoughtForm";
 import { ThoughtList } from "./Components/ThoughtList";
 import { SkeletonLoader } from "./Components/SkeletonLoader";
 import { SortFilterBar } from "./Components/SortFilterBar";
+import { LoginForm } from "./Components/LoginForm";
+import { API_BASE_URL } from "./constants";
 
-const API_URL = "https://js-project-api-uhzm.onrender.com/thoughts";
+// const API_URL = "https://js-project-api-uhzm.onrender.com/thoughts";
 
 export const App = () => {
   const [thoughts, setThoughts] = useState([]);
@@ -15,13 +17,15 @@ export const App = () => {
   const [sortBy, setSortBy] = useState("");
   const [order, setOrder] = useState("desc");
   const [minLikes, setMinLikes] = useState(0);
+  const [user, setUser] = useState(null);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showLiked, setShowLiked] = useState(false);
 
   // Get liked thoughts from local storage
   const [likedThoughts, setLikedThoughts] = useState(() => {
     const stored = localStorage.getItem("likedThoughts");
     return stored ? JSON.parse(stored) : [];
   });
-
 
   /*--- Fetch Thoughts from API ---*/
 
@@ -46,8 +50,8 @@ export const App = () => {
 
       const query = params.toString();
       const url = query
-        ? `${API_URL}?${query}`
-        : API_URL;
+        ? `${API_BASE_URL}/thoughts?${query}`
+        : `${API_BASE_URL}/thoughts`;
 
       try {
         const res = await fetch(url);
@@ -65,6 +69,12 @@ export const App = () => {
     fetchThoughts();
   }, [sortBy, order, minLikes]);
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user")
+    if (storedUser) {
+      setUser(JSON.parse(storedUser))
+    }
+  }, []);
 
   // Sync liked thoughts to local storage whenever likedThoughts changes
   useEffect(() => {
@@ -74,38 +84,14 @@ export const App = () => {
 
   /*--- POST new thought to API ---*/
 
-  const addThought = async (newMessage) => {
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: newMessage }),
-      });
+  const handleThoughtAdded = (newThought) => {
+    setThoughts((prev) => [newThought, ...prev]);
+    setNewThoughtId(newThought._id);
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        setError(errorData.message || "Message must be 5-140 characters.");
-        return;
-      }
-
-      const data = await res.json();
-
-      setError(null);
-
-      // Add the new thought from API
-      setThoughts((prev) => [data.response, ...prev]);
-
-      //Mark this thought as new so it can animate in ThoughtCard
-      setNewThoughtId(data.response._id);
-
-      // Reset newThoughtId after animation is finished
-      setTimeout(() => {
-        setNewThoughtId(null);
-      }, 450);
-
-    } catch (error) {
-      setError("Could not create thought. Try again later.");
-    }
+    // Reset newThoughtId efter animation is finished
+    setTimeout(() => {
+      setNewThoughtId(null);
+    }, 450);
   };
 
 
@@ -124,7 +110,7 @@ export const App = () => {
 
     try {
       // Send like to API
-      const res = await fetch(`${API_URL}/${id}/like`, {
+      const res = await fetch(`${API_BASE_URL}/thoughts/${id}/like`, {
         method: "POST",
         headers: { "Content-Type": "application/json", }
       });
@@ -148,7 +134,7 @@ export const App = () => {
     }
 
     try {
-      const res = await fetch(`${API_URL}/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/thoughts/${id}`, {
         method: "DELETE",
       });
 
@@ -167,9 +153,9 @@ export const App = () => {
 
   const handleUpdate = async (id, updatedMessage) => {
     try {
-      const res = await fetch(`${API_URL}/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/thoughts/${id}`, {
 
-        method: "PUT",
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: updatedMessage }),
       });
@@ -192,16 +178,41 @@ export const App = () => {
     }
   };
 
+  const handleLogin = (userData) => {
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+    setShowLogin(false)
+  };
+
+  const handleLogout = () => {
+    setUser(null)
+    localStorage.removeItem("user")
+  }
+
   return (
     <>
-      <Navbar likedThoughts={likedThoughts} />
+      <Navbar
+        user={user}
+        likedThoughts={likedThoughts}
+        onLoginClick={() => setShowLogin(true)}
+        onLogout={handleLogout}
+        onShowLiked={() => setShowLiked(true)}
+      />
+
+      {showLogin && (
+        <LoginForm
+          handleLogin={handleLogin}
+          onClose={() => setShowLogin(false)}
+        />
+      )}
+
       <main>
         <div className="max-w-sm md:max-w-xl lg:max-w-3xl mx-auto p-4 md:p-8 lg:p-12">
           <h1 className="text-center pb-8 text-2xl lg:text-3xl soft-glow">
             Welcome to Happy Thoughts
           </h1>
 
-          <ThoughtForm onSubmit={addThought} />
+          <ThoughtForm onThoughtAdded={handleThoughtAdded} />
 
           <SortFilterBar
             sortBy={sortBy}

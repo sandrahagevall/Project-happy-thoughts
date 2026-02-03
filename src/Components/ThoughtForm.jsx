@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { API_BASE_URL } from "../constants";
 
-export const ThoughtForm = ({ onSubmit }) => {
+export const ThoughtForm = ({ onThoughtAdded }) => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const maxLength = 140;
   const minLength = 5;
@@ -20,7 +22,7 @@ export const ThoughtForm = ({ onSubmit }) => {
     setError("");
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     //Show error if you have less than 5 characters
@@ -29,8 +31,42 @@ export const ThoughtForm = ({ onSubmit }) => {
       return;
     }
 
-    onSubmit(message);
-    setMessage("");
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+
+      if (!user) {
+        setError("You must be logged in to post a thought");
+        setIsSubmitting(false);
+        setMessage("");
+        return;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/thoughts`, {
+        method: "POST",
+        body: JSON.stringify({ message }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || "Could not create thought");
+        return;
+      }
+
+      onThoughtAdded(data.response);
+      setMessage("");
+    } catch (error) {
+      setError("Could not create thought. Try again later");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const charactersTyped = message.length;
@@ -61,6 +97,7 @@ export const ThoughtForm = ({ onSubmit }) => {
           focus:outline-none focus:ring-2 focus:ring-red-200 
           focus:border-red-200 resize-none rounded-xs
         "
+        disabled={isSubmitting}
       />
 
       <div
@@ -79,6 +116,7 @@ export const ThoughtForm = ({ onSubmit }) => {
 
       <button
         type="submit"
+        disabled={isSubmitting}
         className="
           inline-flex items-center gap-2 px-3 py-3 rounded-full bg-happy 
           hover:bg-happy-hover text-black font-medium font-sans
