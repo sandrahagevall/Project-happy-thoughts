@@ -8,7 +8,6 @@ export const Navbar = ({ user, likedThoughts, onLoginClick, onLogout, onShowLike
         backdrop-blur-md border-b border-pink-200
       "
     >
-      {/* Right side actions */}
       <div className="flex items-center gap-4 sm:mr-16">
         {user && (
           <button

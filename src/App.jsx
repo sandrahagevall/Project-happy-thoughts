@@ -132,7 +132,7 @@ export const App = () => {
     const user = JSON.parse(localStorage.getItem("user"));
 
     if (!user) {
-      setError("You must be logger in to delete a thought")
+      setError("You must be logged in to delete a thought")
       return;
     }
 
@@ -151,7 +151,11 @@ export const App = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.message || "Could not delete thought");
+        if (response.status === 404) {
+          setError("You can only delete your own thoughts");
+        } else {
+          setError(data.message || "Could not delete thought");
+        }
         return;
       }
       // Update state after successful deletion
@@ -183,7 +187,11 @@ export const App = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.message || "Could not update thought");
+        if (response.status === 404) {
+          setError("You can only edit your own thoughts");
+        } else {
+          setError(data.message || "Could not update thought");
+        }
         return;
       }
 
