@@ -110,12 +110,12 @@ export const App = () => {
 
     try {
       // Send like to API
-      const res = await fetch(`${API_BASE_URL}/thoughts/${id}/like`, {
+      const response = await fetch(`${API_BASE_URL}/thoughts/${id}/like`, {
         method: "POST",
         headers: { "Content-Type": "application/json", }
       });
 
-      if (!res.ok) throw new Error("Failed to like thought");
+      if (!response.ok) throw new Error("Failed to like thought");
 
       // Add thought ID to likedThoughts if not already included
       setLikedThoughts((prev) =>
@@ -129,19 +129,29 @@ export const App = () => {
   };
 
   const handleDelete = async (id) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (!user) {
+      setError("You must be logger in to delete a thought")
+      return;
+    }
+
     if (!window.confirm("Are you sure you want to delete this thought?")) {
       return;
     }
 
     try {
-      const res = await fetch(`${API_BASE_URL}/thoughts/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/thoughts/${id}`, {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
       });
 
-      const data = await res.json();
+      const data = await response.json();
 
-      if (!data.success) {
-        setError(data.message);
+      if (!response.ok) {
+        setError(data.message || "Could not delete thought");
         return;
       }
       // Update state after successful deletion
@@ -152,18 +162,28 @@ export const App = () => {
   };
 
   const handleUpdate = async (id, updatedMessage) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (!user) {
+      setError("You must be logged in to update a thought")
+      return;
+    }
+
     try {
-      const res = await fetch(`${API_BASE_URL}/thoughts/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/thoughts/${id}`, {
 
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: updatedMessage }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.accessToken}`,
+        },
       });
 
-      const data = await res.json();
+      const data = await response.json();
 
-      if (!data.success) {
-        setError(data.message);
+      if (!response.ok) {
+        setError(data.message || "Could not update thought");
         return;
       }
 

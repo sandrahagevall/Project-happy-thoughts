@@ -20,7 +20,8 @@ export const LoginForm = ({ handleLogin, onClose }) => {
     setError("");
 
     try {
-      const endpoint = mode === "login" ? `${API_BASE_URL}/users/login` : `${API_BASE_URL}/users/signup`
+      const endpoint = mode === "login" ? `${API_BASE_URL}/users/login` : `${API_BASE_URL}/users/signup`;
+
       const response = await fetch(endpoint, {
         method: "POST",
         body: JSON.stringify({
@@ -44,6 +45,7 @@ export const LoginForm = ({ handleLogin, onClose }) => {
       setError("Invalid email or password");
     }
   };
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;

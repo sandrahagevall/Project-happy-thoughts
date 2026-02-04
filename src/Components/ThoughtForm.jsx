@@ -61,7 +61,7 @@ export const ThoughtForm = ({ onThoughtAdded }) => {
       }
 
       onThoughtAdded(data.response);
-      setMessage("");
+      event.target.reset();
     } catch (error) {
       setError("Could not create thought. Try again later");
     } finally {
