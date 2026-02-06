@@ -21,6 +21,14 @@ export const App = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [totalUserLikes, setTotalUserLikes] = useState(0);
 
+  const showError = (message) => {
+    setError(message);
+
+    setTimeout(() => {
+      setError(null);
+    }, 5000);
+  };
+
   const fetchUserLikes = async () => {
     if (!user) return;
 
@@ -164,9 +172,9 @@ export const App = () => {
 
       if (!response.ok) {
         if (response.status === 404) {
-          setError("You can only delete your own thoughts");
+          showError("You can only delete your own thoughts");
         } else {
-          setError(data.message || "Could not delete thought");
+          showError(data.message || "Could not delete thought");
         }
         return;
       }
