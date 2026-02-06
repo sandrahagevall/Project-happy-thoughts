@@ -15,7 +15,8 @@ export const Navbar = ({ user, likedThoughts, onLoginClick, onLogout }) => {
             <span>{likedThoughts} liked</span>
           </div>
         )}
-
+      </div>
+      <div className="flex justify-end">
         {user ? (
           <button
             onClick={onLogout}
@@ -39,5 +40,5 @@ export const Navbar = ({ user, likedThoughts, onLoginClick, onLogout }) => {
         )}
       </div>
     </nav>
-  )
-}
+  );
+};
