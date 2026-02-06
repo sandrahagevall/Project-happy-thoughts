@@ -40,7 +40,6 @@ export const ThoughtForm = ({ onThoughtAdded }) => {
       if (!user) {
         setError("You must be logged in to post a thought");
         setIsSubmitting(false);
-        setMessage("");
         return;
       }
 
@@ -67,6 +66,9 @@ export const ThoughtForm = ({ onThoughtAdded }) => {
     } finally {
       setIsSubmitting(false);
     }
+
+    setMessage("");
+
   };
 
   const charactersTyped = message.length;
