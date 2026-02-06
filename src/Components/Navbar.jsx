@@ -1,4 +1,4 @@
-export const Navbar = ({ user, likedThoughts, onLoginClick, onLogout, onShowLiked }) => {
+export const Navbar = ({ user, likedThoughts, onLoginClick, onLogout }) => {
   return (
     <nav
       className="
@@ -10,18 +10,10 @@ export const Navbar = ({ user, likedThoughts, onLoginClick, onLogout, onShowLike
     >
       <div className="flex items-center gap-4 sm:mr-16">
         {user && (
-          <button
-            onClick={onShowLiked}
-            className="
-              flex items-center gap-2
-              bg-pink-50 border border-pink-200 text-pink-700
-              px-3 py-1 rounded-full shadow-sm text-sm
-              hover:bg-pink-100 transition
-            "
-          >
-            <span>💗</span>
-            <span>{likedThoughts.length} liked</span>
-          </button>
+          <div className="bg-pink-50 border border-pink-200 text-pink-700 px-3 py-1 rounded-full shadow-sm text-sm">
+            <span className="mr-2">💗</span>
+            <span>{likedThoughts} liked</span>
+          </div>
         )}
 
         {user ? (

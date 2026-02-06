@@ -19,13 +19,33 @@ export const App = () => {
   const [minLikes, setMinLikes] = useState(0);
   const [user, setUser] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
-  const [showLiked, setShowLiked] = useState(false);
+  const [totalUserLikes, setTotalUserLikes] = useState(0);
 
-  // Get liked thoughts from local storage
-  const [likedThoughts, setLikedThoughts] = useState(() => {
-    const stored = localStorage.getItem("likedThoughts");
-    return stored ? JSON.parse(stored) : [];
-  });
+  const fetchUserLikes = async () => {
+    if (!user) return;
+
+    try {
+      const res = await fetch(
+        `${API_BASE_URL}/users/${user.id}/thoughts`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+          },
+        }
+      );
+
+      if (!res.ok) throw new Error();
+
+      const data = await res.json();
+      setTotalUserLikes(data.length);
+    } catch {
+      setError("Could not fetch thoughts for user");
+    }
+  };
+
+  useEffect(() => {
+    fetchUserLikes();
+  }, [user]);
 
   /*--- Fetch Thoughts from API ---*/
 
@@ -72,15 +92,9 @@ export const App = () => {
   useEffect(() => {
     const storedUser = localStorage.getItem("user")
     if (storedUser) {
-      setUser(JSON.parse(storedUser))
+      setUser(JSON.parse(storedUser));
     }
   }, []);
-
-  // Sync liked thoughts to local storage whenever likedThoughts changes
-  useEffect(() => {
-    localStorage.setItem("likedThoughts", JSON.stringify(likedThoughts))
-  }, [likedThoughts]);
-
 
   /*--- POST new thought to API ---*/
 
@@ -107,20 +121,18 @@ export const App = () => {
     );
 
     setThoughts(newThoughts);
-
     try {
       // Send like to API
+      const body = user ? { userId: user.id } : {}; // Only pass body if user is logged in
       const response = await fetch(`${API_BASE_URL}/thoughts/${id}/like`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", }
+        body: JSON.stringify(body),
+        headers: { "Content-Type": "application/json" },
       });
 
       if (!response.ok) throw new Error("Failed to like thought");
 
-      // Add thought ID to likedThoughts if not already included
-      setLikedThoughts((prev) =>
-        prev.includes(id) ? prev : [...prev, id]);
-
+      await fetchUserLikes();
     } catch (error) {
       // Rollback UI if API fails
       setThoughts(previousThoughts);
@@ -208,6 +220,7 @@ export const App = () => {
 
   const handleLogin = (userData) => {
     setUser(userData);
+    // Save user data to localStorage
     localStorage.setItem("user", JSON.stringify(userData));
     setShowLogin(false)
   };
@@ -216,15 +229,13 @@ export const App = () => {
     setUser(null)
     localStorage.removeItem("user")
   }
-
   return (
     <>
       <Navbar
         user={user}
-        likedThoughts={likedThoughts}
+        likedThoughts={totalUserLikes}
         onLoginClick={() => setShowLogin(true)}
         onLogout={handleLogout}
-        onShowLiked={() => setShowLiked(true)}
       />
 
       {showLogin && (
