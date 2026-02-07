@@ -67,14 +67,14 @@ export const LoginForm = ({ handleLogin, onClose }) => {
           onClick={onClose}
           aria-label="Close"
           className="
-          absolute top-3 right-3
-          w-8 h-8
-          flex items-center justify-center
-          rounded-full
-          text-gray-500 hover:text-gray-700
-          hover:bg-gray-100
-          text-xl
-        "
+            absolute top-3 right-3
+            w-8 h-8
+            flex items-center justify-center
+            rounded-full
+            text-gray-500 hover:text-gray-700
+            hover:bg-gray-100
+            text-xl cursor-pointer
+         "
         >
           ×
         </button>
@@ -90,7 +90,10 @@ export const LoginForm = ({ handleLogin, onClose }) => {
             placeholder="Email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"
+            className="
+              w-full px-4 py-2 border rounded-lg 
+              focus:outline-none focus:ring-2 focus:ring-pink-400
+            "
           />
 
           <input
@@ -99,7 +102,10 @@ export const LoginForm = ({ handleLogin, onClose }) => {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"
+            className="
+              w-full px-4 py-2 border rounded-lg 
+              focus:outline-none focus:ring-2 focus:ring-pink-400
+            "
           />
 
           {error && (
@@ -110,7 +116,11 @@ export const LoginForm = ({ handleLogin, onClose }) => {
 
           <button
             type="submit"
-            className="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 rounded-lg transition"
+            className="
+              w-full bg-pink-400 hover:bg-pink-600 
+              text-white font-semibold py-2 rounded-lg 
+              transition cursor-pointer
+            "
           >
             {mode === "login" ? "Log in" : "Register"}
           </button>
@@ -122,7 +132,7 @@ export const LoginForm = ({ handleLogin, onClose }) => {
               No account?{" "}
               <button
                 onClick={() => setMode("signup")}
-                className="text-pink-600 hover:underline"
+                className="text-pink-600 hover:underline cursor-pointer"
               >
                 Register
               </button>
@@ -132,7 +142,7 @@ export const LoginForm = ({ handleLogin, onClose }) => {
               Already have an account?{" "}
               <button
                 onClick={() => setMode("login")}
-                className="text-pink-600 hover:underline"
+                className="text-pink-600 hover:underline cursor-pointer"
               >
                 Log in
               </button>

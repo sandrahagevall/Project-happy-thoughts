@@ -7,7 +7,6 @@ import { SortFilterBar } from "./Components/SortFilterBar";
 import { LoginForm } from "./Components/LoginForm";
 import { API_BASE_URL } from "./constants";
 
-// const API_URL = "https://js-project-api-uhzm.onrender.com/thoughts";
 
 export const App = () => {
   const [thoughts, setThoughts] = useState([]);

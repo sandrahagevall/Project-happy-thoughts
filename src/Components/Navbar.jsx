@@ -10,7 +10,11 @@ export const Navbar = ({ user, likedThoughts, onLoginClick, onLogout }) => {
     >
       <div className="flex items-center gap-4 sm:mr-16">
         {user && (
-          <div className="bg-pink-50 border border-pink-200 text-pink-700 px-3 py-1 rounded-full shadow-sm text-sm">
+          <div className="
+          bg-pink-50 border border-pink-200 text-pink-700
+            px-3 py-1 rounded-full shadow-sm text-sm
+          "
+          >
             <span className="mr-2">💗</span>
             <span>{likedThoughts} liked</span>
           </div>
@@ -22,7 +26,8 @@ export const Navbar = ({ user, likedThoughts, onLoginClick, onLogout }) => {
             onClick={onLogout}
             className="
               text-pink-800 font-semibold
-              hover:underline
+              hover:underline cursor-pointer
+              text-xl
             "
           >
             Log out
@@ -32,7 +37,8 @@ export const Navbar = ({ user, likedThoughts, onLoginClick, onLogout }) => {
             onClick={onLoginClick}
             className="
               text-pink-800 font-semibold
-              hover:underline
+              hover:underline cursor-pointer 
+              text-xl
             "
           >
             Log in
